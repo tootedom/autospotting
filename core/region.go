@@ -19,7 +19,7 @@ type region struct {
 
 	conf *Config
 	// The key in this map is the instance type.
-	instanceTypeInformation map[string]instanceTypeInformation
+	instanceTypeInformation map[string]*instanceTypeInformation
 
 	instances instances
 
@@ -170,7 +170,7 @@ func (r *region) addInstance(inst *ec2.Instance) {
 
 func (r *region) determineInstanceTypeInformation(cfg *Config) {
 
-	r.instanceTypeInformation = make(map[string]instanceTypeInformation)
+	r.instanceTypeInformation = make(map[string]*instanceTypeInformation)
 
 	var info instanceTypeInformation
 
@@ -208,7 +208,7 @@ func (r *region) determineInstanceTypeInformation(cfg *Config) {
 				info.instanceStoreIsSSD = it.Storage.SSD
 			}
 			debug.Println(info)
-			r.instanceTypeInformation[it.InstanceType] = info
+			r.instanceTypeInformation[it.InstanceType] = &info
 		}
 	}
 	// this is safe to do once outside of the loop because the call will only

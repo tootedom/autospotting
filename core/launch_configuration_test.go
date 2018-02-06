@@ -487,7 +487,7 @@ func Test_convertLaunchConfigurationToSpotSpecification(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			spot := tc.lc.convertLaunchConfigurationToSpotSpecification(tc.instance, tc.instanceType, tc.az)
+			spot := tc.lc.convertLaunchConfigurationToSpotSpecification(tc.instance, &tc.instanceType, tc.az)
 			if !reflect.DeepEqual(spot, tc.spotRequest) {
 				t.Errorf("expected: %+v\nactual: %+v", tc.spotRequest, spot)
 			}

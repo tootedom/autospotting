@@ -35,7 +35,7 @@ func (lc *launchConfiguration) countLaunchConfigEphemeralVolumes() int {
 
 func (lc *launchConfiguration) convertLaunchConfigurationToSpotSpecification(
 	baseInstance *instance,
-	newInstance instanceTypeInformation,
+	newInstance *instanceTypeInformation,
 	az string) *ec2.RequestSpotLaunchSpecification {
 
 	var spotLS ec2.RequestSpotLaunchSpecification

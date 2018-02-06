@@ -236,12 +236,12 @@ func TestIsSpot(t *testing.T) {
 func TestIsEBSCompatible(t *testing.T) {
 	tests := []struct {
 		name         string
-		spotInfo     instanceTypeInformation
+		spotInfo     *instanceTypeInformation
 		instanceInfo instance
 		expected     bool
 	}{
 		{name: "EBS not Optimized Spot not Optimized",
-			spotInfo: instanceTypeInformation{
+			spotInfo: &instanceTypeInformation{
 				hasEBSOptimization: false,
 			},
 			instanceInfo: instance{
@@ -252,7 +252,7 @@ func TestIsEBSCompatible(t *testing.T) {
 			expected: true,
 		},
 		{name: "EBS Optimized Spot Optimized",
-			spotInfo: instanceTypeInformation{
+			spotInfo: &instanceTypeInformation{
 				hasEBSOptimization: true,
 			},
 			instanceInfo: instance{
@@ -263,7 +263,7 @@ func TestIsEBSCompatible(t *testing.T) {
 			expected: true,
 		},
 		{name: "EBS Optimized Spot not Optimized",
-			spotInfo: instanceTypeInformation{
+			spotInfo: &instanceTypeInformation{
 				hasEBSOptimization: false,
 			},
 			instanceInfo: instance{
@@ -274,7 +274,7 @@ func TestIsEBSCompatible(t *testing.T) {
 			expected: false,
 		},
 		{name: "EBS not Optimized Spot Optimized",
-			spotInfo: instanceTypeInformation{
+			spotInfo: &instanceTypeInformation{
 				hasEBSOptimization: true,
 			},
 			instanceInfo: instance{
@@ -381,7 +381,7 @@ func TestIsPriceCompatible(t *testing.T) {
 				}},
 				price: tt.instancePrice,
 			}
-			candidate := instanceTypeInformation{pricing: prices{}}
+			candidate := &instanceTypeInformation{pricing: prices{}}
 			candidate.pricing = tt.spotPrices
 			spotPrice := i.calculatePrice(candidate)
 			retValue := i.isPriceCompatible(spotPrice, tt.bestPrice)
@@ -464,12 +464,12 @@ func TestIsClassCompatible(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			i := &instance{typeInfo: instanceTypeInformation{
+			i := &instance{typeInfo: &instanceTypeInformation{
 				vCPU:   tt.instanceCPU,
 				memory: tt.instanceMemory,
 			},
 			}
-			retValue := i.isClassCompatible(tt.spotInfo)
+			retValue := i.isClassCompatible(&tt.spotInfo)
 			if retValue != tt.expected {
 				t.Errorf("Value received: %t expected %t", retValue, tt.expected)
 			}
@@ -593,8 +593,8 @@ func TestIsStorageCompatible(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			i := &instance{typeInfo: tt.instanceInfo}
-			retValue := i.isStorageCompatible(tt.spotInfo, tt.attachedVolumes)
+			i := &instance{typeInfo: &tt.instanceInfo}
+			retValue := i.isStorageCompatible(&tt.spotInfo, tt.attachedVolumes)
 			if retValue != tt.expected {
 				t.Errorf("Value received: %t expected %t", retValue, tt.expected)
 			}
@@ -741,7 +741,7 @@ func TestIsQuantityCompatible(t *testing.T) {
 func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 	tests := []struct {
 		name           string
-		spotInfos      map[string]instanceTypeInformation
+		spotInfos      map[string]*instanceTypeInformation
 		instanceInfo   *instance
 		asg            *autoScalingGroup
 		lc             *launchConfiguration
@@ -751,7 +751,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 		disallowedList []string
 	}{
 		{name: "better/cheaper spot instance found",
-			spotInfos: map[string]instanceTypeInformation{
+			spotInfos: map[string]*instanceTypeInformation{
 				"1": {
 					instanceType: "type1",
 					pricing: prices{
@@ -792,7 +792,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 						AvailabilityZone: aws.String("eu-central-1"),
 					},
 				},
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 					vCPU:         10,
 					memory:       2.5,
@@ -837,7 +837,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 			expectedError:  nil,
 		},
 		{name: "better/cheaper spot instance found but marked as disallowed",
-			spotInfos: map[string]instanceTypeInformation{
+			spotInfos: map[string]*instanceTypeInformation{
 				"1": {
 					instanceType: "type1",
 					pricing: prices{
@@ -878,7 +878,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 						AvailabilityZone: aws.String("eu-central-1"),
 					},
 				},
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 					vCPU:         10,
 					memory:       2.5,
@@ -924,7 +924,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 			expectedError:  errors.New("No cheaper spot instance types could be found"),
 		},
 		{name: "better/cheaper spot instance not found",
-			spotInfos: map[string]instanceTypeInformation{
+			spotInfos: map[string]*instanceTypeInformation{
 				"1": {
 					instanceType: "type1",
 					pricing: prices{
@@ -965,7 +965,7 @@ func TestGetCheapestCompatibleSpotInstanceType(t *testing.T) {
 						AvailabilityZone: aws.String("eu-central-1"),
 					},
 				},
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 					vCPU:         10,
 					memory:       2.5,

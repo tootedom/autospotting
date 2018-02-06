@@ -91,7 +91,7 @@ func (is *instanceManager) instances() <-chan *instance {
 
 type instance struct {
 	*ec2.Instance
-	typeInfo instanceTypeInformation
+	typeInfo *instanceTypeInformation
 	price    float64
 	region   *region
 	asg      *autoScalingGroup
@@ -111,7 +111,7 @@ type instanceTypeInformation struct {
 	hasEBSOptimization       bool
 }
 
-func (i *instance) calculatePrice(spotCandidate instanceTypeInformation) float64 {
+func (i *instance) calculatePrice(spotCandidate *instanceTypeInformation) float64 {
 	spotPrice := spotCandidate.pricing.spot[*i.Placement.AvailabilityZone]
 	debug.Println("Comparing price spot/instance:")
 
@@ -162,7 +162,7 @@ func (i *instance) isPriceCompatible(spotPrice float64, bestPrice float64) bool 
 	return spotPrice != 0 && spotPrice <= i.price && spotPrice <= bestPrice
 }
 
-func (i *instance) isClassCompatible(spotCandidate instanceTypeInformation) bool {
+func (i *instance) isClassCompatible(spotCandidate *instanceTypeInformation) bool {
 	current := i.typeInfo
 
 	debug.Println("Comparing class spot/instance:")
@@ -176,7 +176,7 @@ func (i *instance) isClassCompatible(spotCandidate instanceTypeInformation) bool
 		spotCandidate.GPU >= current.GPU
 }
 
-func (i *instance) isEBSCompatible(spotCandidate instanceTypeInformation) bool {
+func (i *instance) isEBSCompatible(spotCandidate *instanceTypeInformation) bool {
 	if i.EbsOptimized != nil && *i.EbsOptimized && !spotCandidate.hasEBSOptimization {
 		return false
 	}
@@ -191,7 +191,7 @@ func (i *instance) isEBSCompatible(spotCandidate instanceTypeInformation) bool {
 //   original instance
 // - volume size: each of the volumes should be at least as big as the
 //   original instance's volumes
-func (i *instance) isStorageCompatible(spotCandidate instanceTypeInformation, attachedVolumes int) bool {
+func (i *instance) isStorageCompatible(spotCandidate *instanceTypeInformation, attachedVolumes int) bool {
 	existing := i.typeInfo
 
 	debug.Println("Comparing storage spot/instance:")
@@ -275,7 +275,7 @@ func (i *instance) getCheapestCompatibleSpotInstanceType(allowedList []string, d
 
 		candidatePrice := i.calculatePrice(candidate)
 
-		if i.isSpotQuantityCompatible(candidate) &&
+		if i.isSpotQuantityCompatible(*candidate) &&
 			i.isPriceCompatible(candidatePrice, bestPrice) &&
 			i.isEBSCompatible(candidate) &&
 			i.isClassCompatible(candidate) &&

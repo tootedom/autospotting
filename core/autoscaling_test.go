@@ -1964,7 +1964,7 @@ func TestScanInstances(t *testing.T) {
 								},
 								InstanceLifecycle: aws.String("spot"),
 							},
-							typeInfo: instanceTypeInformation{
+							typeInfo: &instanceTypeInformation{
 								pricing: prices{
 									onDemand: 0.5,
 									spot: map[string]float64{
@@ -1982,7 +1982,7 @@ func TestScanInstances(t *testing.T) {
 									AvailabilityZone: aws.String("az-2"),
 								},
 							},
-							typeInfo: instanceTypeInformation{
+							typeInfo: &instanceTypeInformation{
 								pricing: prices{
 									onDemand: 0.8,
 									spot: map[string]float64{
@@ -2012,7 +2012,7 @@ func TestScanInstances(t *testing.T) {
 						},
 						InstanceLifecycle: aws.String("spot"),
 					},
-					typeInfo: instanceTypeInformation{
+					typeInfo: &instanceTypeInformation{
 						pricing: prices{
 							onDemand: 0.5,
 							spot: map[string]float64{
@@ -2031,7 +2031,7 @@ func TestScanInstances(t *testing.T) {
 							AvailabilityZone: aws.String("az-2"),
 						},
 					},
-					typeInfo: instanceTypeInformation{
+					typeInfo: &instanceTypeInformation{
 						pricing: prices{
 							onDemand: 0.8,
 							spot: map[string]float64{
@@ -2927,7 +2927,7 @@ func TestGetAllowedInstaceTypes(t *testing.T) {
 		{name: "Single Type Tag c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -2953,7 +2953,7 @@ func TestGetAllowedInstaceTypes(t *testing.T) {
 		{name: "Single Type Cmd Line c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -2974,7 +2974,7 @@ func TestGetAllowedInstaceTypes(t *testing.T) {
 		{name: "Single Type from Base c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "c2.xlarge",
 				},
 				region: &region{},
@@ -2995,7 +2995,7 @@ func TestGetAllowedInstaceTypes(t *testing.T) {
 		{name: "Command line precedence on c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3045,7 +3045,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "Single Type Tag c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3071,7 +3071,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "Single Type Cmd Line c2.xlarge",
 			expected: []string{"c2.xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3092,7 +3092,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "ASG precedence on command line",
 			expected: []string{"c4.4xlarge"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3118,7 +3118,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "Comma separated list",
 			expected: []string{"c2.xlarge", "t2.medium", "c3.small"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3139,7 +3139,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "Space separated list",
 			expected: []string{"c2.xlarge", "t2.medium", "c3.small"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3160,7 +3160,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "No empty elements in comma separated list",
 			expected: []string{"c2.xlarge", "t2.medium", "c3.small"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
@@ -3181,7 +3181,7 @@ func TestGetDisallowedInstanceTypes(t *testing.T) {
 		{name: "No empty elements in space separated list",
 			expected: []string{"c2.xlarge", "t2.medium", "c3.small"},
 			instanceInfo: &instance{
-				typeInfo: instanceTypeInformation{
+				typeInfo: &instanceTypeInformation{
 					instanceType: "typeX",
 				},
 				region: &region{},
