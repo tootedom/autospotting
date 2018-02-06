@@ -8,9 +8,9 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
-	"github.com/cristim/autospotting/core"
 	"github.com/cristim/ec2-instances-info"
 	"github.com/namsral/flag"
+	"github.com/tootedom/autospotting/core"
 )
 
 type cfgData struct {
@@ -35,11 +35,6 @@ func main() {
 
 func run() {
 	log.Println("Starting autospotting agent, build ", Version, "expiring on", ExpirationDate)
-
-	if isExpired(ExpirationDate) {
-		log.Fatalln("Autospotting expired, please install a newer version.")
-		return
-	}
 
 	log.Printf("Parsed command line flags: "+
 		"regions='%s' "+

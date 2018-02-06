@@ -179,6 +179,7 @@ func (r *region) determineInstanceTypeInformation(cfg *Config) {
 		var price prices
 
 		debug.Println(it)
+		logger.Println(it)
 
 		// populate on-demand information
 		price.onDemand = it.Pricing[r.name].Linux.OnDemand * cfg.OnDemandPriceMultiplier
@@ -249,7 +250,8 @@ func (r *region) requestSpotPrices() error {
 			continue
 		}
 
-		if r.instanceTypeInformation[instType].pricing.spot == nil {
+		logger.Println("Instance Type:", instType, "values:", r.instanceTypeInformation[instType])
+		if r.instanceTypeInformation[instType] == nil || r.instanceTypeInformation[instType].pricing.spot == nil {
 			logger.Println(r.name, "Instance data missing for", instType, "in", az,
 				"skipping because this region is currently not supported")
 			continue
