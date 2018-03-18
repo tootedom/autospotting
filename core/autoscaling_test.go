@@ -2133,13 +2133,22 @@ func TestScanInstances(t *testing.T) {
 func TestPropagatedInstance(t *testing.T) {
 	tests := []struct {
 		name         string
+		ASGLCName    string
 		tagsASG      []*autoscaling.TagDescription
 		expectedTags []*ec2.Tag
 	}{
 		{name: "no tags on asg",
-			tagsASG: []*autoscaling.TagDescription{},
+			ASGLCName: "testLC0",
+			tagsASG:   []*autoscaling.TagDescription{},
+			expectedTags: []*ec2.Tag{
+				{
+					Key:   aws.String("LaunchConfigurationName"),
+					Value: aws.String("testLC0"),
+				},
+			},
 		},
 		{name: "multiple tags but none to propagate",
+			ASGLCName: "testLC1",
 			tagsASG: []*autoscaling.TagDescription{
 				{
 					Key:               aws.String("k1"),
@@ -2157,8 +2166,15 @@ func TestPropagatedInstance(t *testing.T) {
 					PropagateAtLaunch: aws.Bool(false),
 				},
 			},
+			expectedTags: []*ec2.Tag{
+				{
+					Key:   aws.String("LaunchConfigurationName"),
+					Value: aws.String("testLC1"),
+				},
+			},
 		},
 		{name: "multiple tags but none to propagate",
+			ASGLCName: "testLC2",
 			tagsASG: []*autoscaling.TagDescription{
 				{
 					Key:               aws.String("aws:k1"),
@@ -2176,8 +2192,15 @@ func TestPropagatedInstance(t *testing.T) {
 					PropagateAtLaunch: aws.Bool(false),
 				},
 			},
+			expectedTags: []*ec2.Tag{
+				{
+					Key:   aws.String("LaunchConfigurationName"),
+					Value: aws.String("testLC2"),
+				},
+			},
 		},
 		{name: "multiple tags on asg - only one to propagate",
+			ASGLCName: "testLC3",
 			tagsASG: []*autoscaling.TagDescription{
 				{
 					Key:               aws.String("k1"),
@@ -2197,6 +2220,10 @@ func TestPropagatedInstance(t *testing.T) {
 			},
 			expectedTags: []*ec2.Tag{
 				{
+					Key:   aws.String("LaunchConfigurationName"),
+					Value: aws.String("testLC3"),
+				},
+				{
 					Key:   aws.String("k2"),
 					Value: aws.String("v2"),
 				},
@@ -2208,6 +2235,7 @@ func TestPropagatedInstance(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			a := &autoScalingGroup{
 				Group: &autoscaling.Group{
+					LaunchConfigurationName: aws.String(tt.ASGLCName),
 					Tags: tt.tagsASG,
 				},
 			}
