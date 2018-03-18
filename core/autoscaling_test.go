@@ -1919,7 +1919,7 @@ func TestFindSpotInstanceRequests(t *testing.T) {
 									InstanceId: aws.String("1"),
 									Tags: []*ec2.Tag{
 										{
-											Key:   aws.String(DefaultSIRRequestCompleteTageName),
+											Key:   aws.String(DefaultSIRRequestCompleteTagName),
 											Value: aws.String("true"),
 										},
 									},
@@ -3569,7 +3569,7 @@ func TestProcessOpenSIR(t *testing.T) {
 										InstanceId: aws.String("1"),
 										Tags: []*ec2.Tag{
 											{
-												Key:   aws.String(DefaultSIRRequestCompleteTageName),
+												Key:   aws.String(DefaultSIRRequestCompleteTagName),
 												Value: aws.String("true"),
 											},
 										},
@@ -3611,7 +3611,7 @@ func TestProcessOpenSIR(t *testing.T) {
 										InstanceId: aws.String("1"),
 										Tags: []*ec2.Tag{
 											{
-												Key:   aws.String(DefaultSIRRequestCompleteTageName),
+												Key:   aws.String(DefaultSIRRequestCompleteTagName),
 												Value: aws.String("true"),
 											},
 										},
