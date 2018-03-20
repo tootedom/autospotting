@@ -162,6 +162,7 @@
                 "ec2:DescribeSpotPriceHistory",
                 "ec2:RequestSpotInstances",
                 "ec2:TerminateInstances",
+                "ec2:DescribeInstanceStatus",
                 "iam:PassRole",
                 "iam:CreateServiceLinkedRole",
                 "logs:CreateLogGroup",
