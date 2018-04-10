@@ -1420,6 +1420,7 @@ func TestDetachAndTerminateOnDemandInstance(t *testing.T) {
 				services: connections{
 					autoScaling: mockASG{dierr: nil},
 				},
+				conf: &Config{},
 			},
 			instanceID: aws.String("1"),
 			expected:   nil,
@@ -1444,6 +1445,7 @@ func TestDetachAndTerminateOnDemandInstance(t *testing.T) {
 				services: connections{
 					autoScaling: mockASG{dierr: errors.New("detach")},
 				},
+				conf: &Config{},
 			},
 			instanceID: aws.String("1"),
 			expected:   errors.New("detach"),
@@ -1468,6 +1470,7 @@ func TestDetachAndTerminateOnDemandInstance(t *testing.T) {
 				services: connections{
 					autoScaling: mockASG{dierr: nil},
 				},
+				conf: &Config{},
 			},
 			instanceID: aws.String("1"),
 			expected:   errors.New("terminate"),
@@ -1492,6 +1495,7 @@ func TestDetachAndTerminateOnDemandInstance(t *testing.T) {
 				services: connections{
 					autoScaling: mockASG{dierr: errors.New("detach")},
 				},
+				conf: &Config{},
 			},
 			instanceID: aws.String("1"),
 			expected:   errors.New("detach"),
@@ -2764,6 +2768,7 @@ func TestReplaceOnDemandInstanceWithSpot(t *testing.T) {
 				),
 				region: &region{
 					name: "test-region",
+					conf: &Config{},
 					services: connections{
 						autoScaling: &mockASG{
 							uasgo:   nil,
@@ -2863,6 +2868,7 @@ func TestReplaceOnDemandInstanceWithSpot(t *testing.T) {
 				),
 				region: &region{
 					name: "test-region",
+					conf: &Config{},
 					services: connections{
 						autoScaling: &mockASG{
 							uasgo:   nil,
@@ -2910,6 +2916,7 @@ func TestReplaceOnDemandInstanceWithSpot(t *testing.T) {
 				},
 				region: &region{
 					name: "test-region",
+					conf: &Config{},
 					services: connections{
 						autoScaling: &mockASG{
 							uasgo:   nil,
@@ -2962,6 +2969,7 @@ func TestReplaceOnDemandInstanceWithSpot(t *testing.T) {
 				instances: makeInstances(),
 				region: &region{
 					name: "test-region",
+					conf: &Config{},
 					services: connections{
 						autoScaling: &mockASG{
 							uasgo:   nil,
